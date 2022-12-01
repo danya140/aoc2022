@@ -1,10 +1,3 @@
-if(NOT WIN32)
-    string(ASCII 27 Esc)
-    set(ColourReset "${Esc}[m")
-    set(ColourBold  "${Esc}[1m")
-    set(Red         "${Esc}[31m")
-endif()
-
 macro(add_include)
     include_directories(${CMAKE_SOURCE_DIR}/include)
 

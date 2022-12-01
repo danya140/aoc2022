@@ -1,4 +1,4 @@
-project(day_template)
+project(day_1)
 
 include(${CMAKE_SOURCE_DIR}/helper.cmake)
 
@@ -9,4 +9,4 @@ add_inputs()
 
 message("${PROJECT_NAME} source files: ${SOURCE_FILES}")
 
-add_executable(day_template ${SOURCE_FILES})
+add_executable(day_1 ${SOURCE_FILES})
