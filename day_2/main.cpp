@@ -22,29 +22,13 @@ enum RESULT
 typedef std::pair<SHAPE, SHAPE> Round;
 typedef std::pair<SHAPE, RESULT> RoundResult;
 
-SHAPE encodeEnemyShape(char shape)
+SHAPE encodeShape(char shape)
 {
-    if (shape == 'A')
+    if (shape == 'A' || shape == 'X')
     {
         return ROCK;
     }
-    else if (shape == 'B')
-    {
-        return PAPER;
-    }
-    else
-    {
-        return SCISSORS;
-    }
-}
-
-SHAPE encodeMyShape(char shape)
-{
-    if (shape == 'X')
-    {
-        return ROCK;
-    }
-    else if (shape == 'Y')
+    else if (shape == 'B' || shape == 'Y')
     {
         return PAPER;
     }
@@ -82,8 +66,8 @@ std::vector<Round> readInput1()
         while (std::getline(file, line))
         {
             Round currentRound;
-            currentRound.first = encodeEnemyShape(line.at(0));
-            currentRound.second = encodeMyShape(line.at(2));
+            currentRound.first = encodeShape(line.at(0));
+            currentRound.second = encodeShape(line.at(2));
             inputData.push_back(currentRound);
         }
     }
@@ -103,7 +87,7 @@ std::vector<RoundResult> readInput2()
         while (std::getline(file, line))
         {
             RoundResult currentRound;
-            currentRound.first = encodeEnemyShape(line.at(0));
+            currentRound.first = encodeShape(line.at(0));
             currentRound.second = encodeResultShape(line.at(2));
             inputData.push_back(currentRound);
         }
@@ -161,7 +145,6 @@ RESULT roundResult(SHAPE enemy, SHAPE me)
 int calculateTotalScore(const std::vector<Round>& input)
 {
     int score = 0;
-
     for (const Round& currentRound : input)
     {
         RESULT result = roundResult(currentRound.first, currentRound.second);
@@ -194,7 +177,6 @@ int predictMoveScore(const std::vector<RoundResult>& input)
     for (const RoundResult& currentRound : input)
     {
         SHAPE result = predictMove(currentRound.first, currentRound.second);
-
         score += int(result) + int(currentRound.second);
     }
 
@@ -205,7 +187,6 @@ int predictMoveScore(const std::vector<RoundResult>& input)
 int main()
 {
     START_TIMER(point_1)
-    std::cout << "Hello, World!" << std::endl;
 
     std::vector<Round> input1 = readInput1();
     std::cout << "Match score: " << calculateTotalScore(input1) << std::endl;
