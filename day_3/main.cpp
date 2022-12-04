@@ -103,7 +103,6 @@ int calculateGroupPriority(const std::vector<std::string>& input)
 int main()
 {
     START_TIMER(point_1)
-    std::cout << "Hello, World!" << std::endl;
     std::vector<std::string> input = readInput();
 
     std::cout << "Total priority: " << calculatePriorities(input) << std::endl;
