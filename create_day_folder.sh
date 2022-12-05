@@ -6,5 +6,12 @@ cd day_$1
 cookies="$(cat ../cookies.txt)"
 curl https://adventofcode.com/2022/day/$1/input --output input.txt --cookie "$cookies"
 
-sed -i '' "s/day_template/day_$1/g" CMakeLists.txt # macos need '' argument TODO check compatibility with linux
-#sed -i "s/day_template/day_$1/g" CMakeLists.txt # Linux version
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  sed -i "s/day_template/day_$1/g" CMakeLists.txt # Linux version
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' "s/day_template/day_$1/g" CMakeLists.txt # macos need '' argument
+fi
+
+touch input_example.txt
+
+git add *
