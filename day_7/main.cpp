@@ -8,6 +8,9 @@
 
 const char* INPUT = "input.txt";
 
+const long long int TOTAL_SIZE = 70000000;
+const long long int UPDATE_SIZE = 30000000;
+
 void parseFolder(std::ifstream& fileStream, std::shared_ptr<Folder>& rootFolder)
 {
     std::string line;
@@ -50,11 +53,9 @@ void parseFolder(std::ifstream& fileStream, std::shared_ptr<Folder>& rootFolder)
     }
 }
 
-std::vector<std::string> readInput()
+std::shared_ptr<Folder>readInput()
 {
     std::ifstream file(INPUT);
-
-    std::vector<std::string> inputData;
 
     std::shared_ptr<Folder> rootFolder = std::make_shared<Folder>("/");
     if(file.is_open())
@@ -64,15 +65,81 @@ std::vector<std::string> readInput()
         parseFolder(file, rootFolder);
     }
 
-    return inputData;
+    return rootFolder;
+}
+
+void printFoldersSize(std::shared_ptr<Folder> rootFolder, int level)
+{
+    std::string tab;
+    for (int i = 0; i < level; ++i)
+    {
+        tab += "\t";
+    }
+
+    std::cout << tab << rootFolder->getName() << " size:" << rootFolder->getSize() << std::endl;
+    for (const std::shared_ptr<Folder>& folder : rootFolder->getFolders())
+    {
+        printFoldersSize(folder, level + 1);
+    }
+}
+
+long long int foldersSmallerThan(std::shared_ptr<Folder> rootFolder, int limit, long long int& totalSize)
+{
+    for (const std::shared_ptr<Folder>& folder : rootFolder->getFolders())
+    {
+        foldersSmallerThan(folder, limit, totalSize);
+    }
+
+    long long int rootSize = rootFolder->getSize();
+    if(rootSize <= limit)
+    {
+        totalSize += rootSize;
+    }
+
+    return totalSize;
+}
+
+long long int needFreedUp(std::shared_ptr<Folder> rootFolder)
+{
+    return UPDATE_SIZE - (TOTAL_SIZE - rootFolder->getSize());
+}
+
+void foldersBiggerThan(std::shared_ptr<Folder> rootFolder, long long int limit, std::vector<int>& sizes)
+{
+    for (const std::shared_ptr<Folder>& folder : rootFolder->getFolders())
+    {
+        foldersBiggerThan(folder, limit, sizes);
+    }
+
+    long long int rootSize = rootFolder->getSize();
+    if(rootSize >= limit)
+    {
+        sizes.push_back(rootSize);
+    }
+}
+
+int findOptimalFolderForDeletion(std::shared_ptr<Folder> rootFolder)
+{
+    std::vector<int> sizes;
+    foldersBiggerThan(rootFolder, needFreedUp(rootFolder), sizes);
+    std::sort(sizes.begin(),  sizes.end());
+
+    return sizes.front();
 }
 
 int main()
 {
     START_TIMER(point_1)
 
-    std::vector<std::string> input = readInput();
-    std::cout << "Answer: " << std::endl;
+    std::shared_ptr<Folder> input = readInput();
+//    printFoldersSize(input, 0);
+
+    long long int totalSize = 0;
+    foldersSmallerThan(input, 100000, totalSize);
+    std::cout << "Total size of all folders smaller than 100000: " << totalSize << std::endl;
+
+    std::cout << "Need to freed up " << needFreedUp(input) << std::endl;
+    std::cout << "Size of folder optimal for deletion " << findOptimalFolderForDeletion(input) << std::endl;
 
     STOP_TIMER(point_1)
     return 0;

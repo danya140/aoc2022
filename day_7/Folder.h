@@ -27,6 +27,8 @@ public:
     int getSize() const;
     std::string getName() const;
 
+    std::vector<std::shared_ptr<Folder>> getFolders() const;
+
     std::shared_ptr<Folder> getFolder(const std::string& name);
 
 private:

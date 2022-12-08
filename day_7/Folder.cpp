@@ -56,3 +56,8 @@ std::shared_ptr<Folder> Folder::getFolder(const std::string &name)
         }
     }
 }
+
+std::vector<std::shared_ptr<Folder>> Folder::getFolders() const
+{
+    return m_folders;
+}
