@@ -132,7 +132,7 @@ int main()
     START_TIMER(point_1)
 
     std::shared_ptr<Folder> input = readInput();
-//    printFoldersSize(input, 0);
+    printFoldersSize(input, 0);
 
     long long int totalSize = 0;
     foldersSmallerThan(input, 100000, totalSize);
