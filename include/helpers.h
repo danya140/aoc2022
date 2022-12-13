@@ -49,10 +49,10 @@ inline std::vector<std::string> split(const std::string& str, char delimiter)
  * Join all elements of input vector
  */
 template <class T>
-inline std::string vector2String(const std::vector<T>& input)
+inline std::string vector2String(const std::vector<T>& input, std::string delimiter = "")
 {
     std::stringstream stream;
-    std::copy(input.begin(), input.end(), std::ostream_iterator<T>(stream, ""));
+    std::copy(input.begin(), input.end(), std::ostream_iterator<T>(stream, delimiter.c_str()));
 
     return stream.str();
 }
